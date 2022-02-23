@@ -4,7 +4,7 @@ const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
     Query: {
-        user: async (parent, { user = null, params }) => {
+        me: async (parent, { user = null, params }) => {
             return User.findOne({
                 $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
             });
@@ -16,7 +16,7 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        addBook: async (parent, { user, body }, context) => {
+        saveBook: async (parent, { user, body }, context) => {
             if (context.user) {
                 return User.findOneAndUpdate(
                     { _id: context.user._id },
